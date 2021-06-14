@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+    <title>Room url</title>
+    <style>
+        header{
+            font-size:40px;
+            font-family:monospace;
+            width: 100%;
+            text-align: center;
+        }
+        form{
+            margin: 5%;
+        }
+    </style>
+</head>
+<header>
+    Enter your room url
+</header>
+
+<body>
+    {%if problem_occured == True%}
+    <div class="alert alert-danger" role="alert">
+        A problem occured while displaying your page! Please make sure that you entered a google form link.
+    </div>
+    {%endif%}
+    <form action="{%url 'display_room'%}" method="POST">
+        {%csrf_token%}
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label"></label>
+            <input type="text" class="form-control" id="url" aria-describedby="emailHelp" name="url" required>
+
+        </div>
+        <input type="text" value={{room_name}} name="room_name" class="hide" style="display: None;" >
+        <input type="text" value={{room_password}} name="room_password" class="hide" style="display: None;" >
+        <input type="text" value={{name}} name="name" style="display: none;">
+        <div class="container" style="width:100%;text-align:center">
+            <button type="submit" class="btn btn-primary" align="center">Submit</button>
+        </div>
+    </form>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

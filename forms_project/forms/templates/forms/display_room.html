@@ -1,0 +1,115 @@
+
+
+{% load vote_count %}
+{%load get_id%}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote the options!</title>
+    <style>
+        #option{
+            display: inline-block;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 1.3rem
+        }
+        span{
+            font-size: 1.5rem;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+        }
+        .container{
+            margin-left:8%;
+            margin-top:5%;
+        }
+        #question{
+            font-size:1.8rem;
+            font-family: monospace;
+        }
+        a{
+            text-decoration: none;
+            font-size: 30px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        header{
+            width: 100%;
+            text-align: center;
+            font-size:40px;
+            font-family: monospace;
+        }
+        button{
+            padding: 8px;
+            width: 76px;
+            background: transparent;
+            border: 2px solid black;
+            border-radius: 4px;
+        }
+        button:hover{
+            color:slategrey;
+            background:black;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Vote the options!
+    </header>
+    <div class="container">
+        {%for vote,option,question in zipped_list%}
+            <h3 id="question">{{question}}</h1>
+            {%for sub_option in option%}
+            <span>{{sub_option}} &nbsp; &nbsp; </span>  
+            
+            {%get_id sub_option question as option_id%}
+            
+            <span>
+
+                <button type="button" onclick="vote_option('{%get_id sub_option question%}','{{question}}','{{room_name}}','{{name}}','{{sub_option}}')">Vote</button>
+                {% vote_count sub_option question %}
+                <br>
+                <br>
+            {%endfor%}
+            <br>
+            <br>
+        {%endfor%}
+
+    </div>
+    <script>
+        function vote_option(id,question,room_name,name,option){
+            data = JSON.stringify({
+                id:id,
+                question:question,
+                room_name:room_name,
+                name:name,
+                option:option,
+            })
+            let csrftoken = getCookie('csrftoken');
+            fetch("/vote_option", {
+                method: "POST",
+                body: data,
+                headers: {"Accept":"application/json, text/plain, */*", "Content-Type": "application/json","X-CSRFToken": csrftoken}
+            })
+
+            location.reload()
+        }
+
+        function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+    </script>
+</body>
+</html>
